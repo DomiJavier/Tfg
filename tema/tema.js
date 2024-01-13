@@ -26,6 +26,12 @@ const tema = StyleSheet.create({
       paddingLeft: 40,
       paddingRight: 40
     },
+    contenedorM: {
+      alignItems: 'center',
+      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+      borderRadius: 5,
+      padding: 5
+    },
     contenedor: {
         margin: 30,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -75,6 +81,10 @@ const tema = StyleSheet.create({
       fontWeight: 'bold',
       flex: 1,
       textAlign:"center"
+    },
+    TextoPasado: {
+      fontWeight: 'bold',
+      color: 'rgb(145, 25, 53)'
     },
     fila: {
       flexDirection: 'row',

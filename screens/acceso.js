@@ -5,6 +5,7 @@ import { Formik, useField } from 'formik';
 import { validacion } from '../components/validacionAcceso';
 import { useAuth } from '../components/autorizacion';
 import tema from '../tema/tema';
+import Recuperar from './recuperar';
 
 const Acceso = () => {
   LogBox.ignoreAllLogs();
@@ -26,11 +27,11 @@ const Acceso = () => {
       if (data.success) {
         const userData = { id: 1, name: usuario }; // Simulación de datos del usuario
         login(userData);
-        Alert.alert('Credenciales Correctas');
         console.log("Credenciales Correctas");
-      } else {
+      } else { 
         console.log("Credenciales incorrectas");
       }
+      Alert.alert(data.message);
     } catch (error) {
       console.error('Error:', error);
     }

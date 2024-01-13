@@ -15,6 +15,8 @@ import Mensual from './screens/mensual';
 import Sintomas from './screens/sintomas';
 import Horario from './screens/horario';
 import Medicacion from './screens/medicacion';
+import Prueba from './screens/prueba';
+import Recuperar from './screens/recuperar';
 /*useEffect(() => {
     configurePushNotifications();
   }, []);*/
@@ -79,6 +81,7 @@ const MainNavigator = () => {
       ) : (
         <>
         <Tab.Screen name="Acceso" component={Acceso}/>
+        <Tab.Screen name="Recuperar" component={Recuperar}/>
         </>
       )}
     </Tab.Navigator>

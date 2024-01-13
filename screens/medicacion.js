@@ -16,6 +16,7 @@ const Medicacion = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [options, setOptions] = useState([]);
   const [tabla, setTabla] = useState([]);
+  const [tabla2, setTabla2] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
     const abrir = () => {
@@ -98,7 +99,21 @@ const Medicacion = () => {
         setTabla(datos.map((tabla) => ({ hora: tabla.hora, medicacion: tabla.medicacion, fecha: tabla.fecha})))
       } catch (error) {
         //console.error('Error al obtener datos del servidor:', error);
-        setTabla({"medicacion": "vacío", hora: 0, "fecha": ''})
+        setTabla('NULL')
+      }
+      try {
+        const response = await fetch('http://192.168.1.145:3000/HistoricoMedicacion', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ usuario }),
+        });
+        datos2=await response.json();
+        setTabla2(datos2.map((tabla2) => ({ hora: tabla2.hora, medicacion: tabla2.medicacion, fecha: tabla2.fecha})))
+      } catch (error) {
+        //console.error('Error al obtener datos del servidor:', error);
+        setTabla2('NULL')
       }
     };
     useEffect(() => {
@@ -138,7 +153,7 @@ const Medicacion = () => {
     return (
       <ImageBackground  source={require('../assets/img/fondo.jpg')} resizeMode={'cover'} style={tema.fondo}>
         <View style={tema.contenedor}> 
-          <FlatList
+        { tabla!='NULL' ?<><FlatList
             ListHeaderComponent={() => <View style={tema.cabecera}>
             <Text style={tema.cabeceraTexto}>Hora</Text>
             <Text style={tema.cabeceraTexto}>Medicación</Text>
@@ -146,7 +161,17 @@ const Medicacion = () => {
           </View>}
             data={tabla}
             renderItem={renderItem}
-          />
+          /></>: null }
+          { tabla2!='NULL' ? <><View style={tema.contenedorM}><Text style={tema.TextoPasado}> Medicaciones Pasadas </Text></View> 
+          <FlatList
+            ListHeaderComponent={() => <View style={tema.cabecera}>
+            <Text style={tema.cabeceraTexto}>Hora</Text>
+            <Text style={tema.cabeceraTexto}>Medicación</Text>
+            <Text style={tema.cabeceraTexto}>Fecha</Text>
+          </View>}
+            data={tabla2}
+            renderItem={renderItem}
+          /></>: null }
           <Button style={tema.boton} title="Abrir" onPress={abrir} />
         </View>
         <Modal
@@ -156,49 +181,46 @@ const Medicacion = () => {
           onRequestClose={cerrar}
         >
           
-          <Formik initialValues={initialValues} validationSchema={validacion} onSubmit={values => handleMedicacion(values)}>
-    {({ handleChange, handleSubmit, values, handleBlur, errors}) => {
-      return (
-        <View style={tema.modalForm}>
-        
-        
-      <FormikInputValue
-        placeholder="Hora"
-        name="hora"
-        keyboardType="numeric"
-      />
-      <Button
+      <Formik initialValues={initialValues} validationSchema={validacion} onSubmit={values => handleMedicacion(values)}>
+      {({ handleChange, handleSubmit, values}) => {
+        return (
+          <View style={tema.modalForm}>
+            <FormikInputValue
+            placeholder="Hora"
+            name="hora"
+            keyboardType="numeric"
+            />
+            <Button
             title="Abrir Selector de Fechas"
             color="#00a200"
             onPress={() => setShowDatePicker(true)}
-          />
-
-          {showDatePicker && (
-            <DateTimePicker
-              name="date"
-              value={selectedDate}
-              mode="date"
-              display="default"
-              locale="es-ES"
-              onChange={(event, selectedDate) => {
-                setShowDatePicker(false);
-                if (event.type === 'set' && selectedDate) {
-                  setSelectedDate(selectedDate);
-                  values.date=selectedDate;
-                  handleChange("date");
-                }
-              }}
             />
+            {showDatePicker && (
+              <DateTimePicker
+                name="date"
+                value={selectedDate}
+                mode="date"
+                display="default"
+                locale="es-ES"
+                onChange={(event, selectedDate) => {
+                  setShowDatePicker(false);
+                  if (event.type === 'set' && selectedDate) {
+                    setSelectedDate(selectedDate);
+                    values.date=selectedDate;
+                    handleChange("date");
+                  }
+                }}
+              />
             )}
-      <FormikInputValue
-        placeholder="Medicación"
-        name="medicacion"
-      />
-      <View style={tema.Boton}><Button title="Registrar" onPress={handleSubmit} /></View>
-      <View style={tema.Boton}><Button color="#ff5c5c" title="Cerrar" onPress={cerrar} /></View>
-      </View>
-      )}}
-    </Formik>
+            <FormikInputValue
+            placeholder="Medicación"
+            name="medicacion"
+            />
+            <View style={tema.Boton}><Button title="Registrar" onPress={handleSubmit} /></View>
+            <View style={tema.Boton}><Button color="#ff5c5c" title="Cerrar" onPress={cerrar} /></View>
+          </View>
+        )}}
+        </Formik>
             
           
         </Modal>

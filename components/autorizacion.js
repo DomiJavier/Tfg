@@ -1,28 +1,3 @@
-/*import { createContext, useContext, useState } from 'react';
-
-const AuthContext = createContext();
-
-export const Autorizacion = ({ children }) => {
-  const [isAuthenticated, setAuthenticated] = useState(false);
-
-  const login = () => {
-    setAuthenticated(true);
-  };
-
-  const logout = () => {
-    setAuthenticated(false);
-  };
-
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};*/
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
